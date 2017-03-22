@@ -17,16 +17,6 @@ local movie = class'Node.Movie':extends'Node.Node'
 -- @field type
 movie.type = 'movie'
 
---- 重载生成类实例方法
--- @function new
--- @param path 路径
--- @param uri URI
--- @return Node.Node
--- @usage local movie = movie:new'/var/www'
-function movie:new( path, uri )
-    return movie:super().new(self, path, uri)
-end
-
 --- 检查路径是否符合节点特征
 -- @function test
 -- @param path 路径
