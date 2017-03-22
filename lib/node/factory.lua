@@ -44,6 +44,7 @@ factory._nodes = {}
 --- 可用节点类型
 -- @field _types
 factory._types = {
+    class.load'Node.Movie',
     class.load'Node.Node'
 }
 
