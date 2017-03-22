@@ -3,11 +3,11 @@
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type Base
 -- @field __class 类名
-local component = setmetatable({
+class = setmetatable({
     __class = 'Base'
 }, {
     __call = function ( self, name )
-        local class = setmetatable({
+        local derived = setmetatable({
             --- 字符串类型转化机制
             -- 至 LuaJIT-2.0.4 为止，`tostring()` 函数都只会检查并调用**元表**的 `__tostring` 函数。
             --
@@ -33,50 +33,69 @@ local component = setmetatable({
             --
             -- 因此为了能够使用本基类统一的 `__tostring` 方法，在定义每个派生类时，都需要显性地定义派生类中的方法，使其能逐层递归调用至基类。
             __tostring = function ( self )
-                return getmetatable(self):super().__tostring(self)
+                return class.__tostring(self)
             end,
             __class = name
         }, self)
-        class.__index = class
-        return class
+        derived.__index = derived
+        return derived
     end
 })
-component.__index = component
+class.__index = class
 
 --- 根据类名加载类
 -- @function load
--- @param class 类名
+-- @param name 类名
 -- @return Base
 -- @usage local component = class.load'Node.Node'
-function component.load( class )
-    return require(tostring(class):lower():gsub('%.', '/'))
+function class.load( name )
+    return require(tostring(name):lower():gsub('%.', '/'))
 end
 
--- 继承类
+--- 继承类
 -- @function extends
--- @param class 类名
+-- @param name 类名
 -- @return Base
 -- @usage local component = class:extends'Node.Node'
-function component:extends( class )
-    return setmetatable(self, component.load(class))
+function class:extends( name )
+    return setmetatable(self, self.load(name))
 end
 
--- 获取父类
+--- 获取（原型）类
+-- @function proto
+-- @return Base
+-- @usage local proto = class:proto()
+-- @usage local proto = instance:proto()
+function class:proto()
+    local is, super = rawget(self, '__class'), getmetatable(self)
+    if is then
+        return self
+    else
+        return super
+    end
+end
+
+--- 获取父类
 -- @function super
 -- @return Base
 -- @usage local super = class:super()
-function component:super()
-    return getmetatable(self)
+-- @usage local super = instance:super()
+function class:super()
+    local is, super = rawget(self, '__class'), getmetatable(self)
+    if is then
+        return super
+    else
+        return getmetatable(super)
+    end
 end
 
--- 生成类实例
+--- 生成类实例
 -- @function new
 -- @param props 属性表
--- @param class 可选。原型类
 -- @return Base
 -- @usage local instance = class:new{ a = '1', b = 2 }
-function component:new( props, class )
-    local instance = setmetatable(props, class or self)
+function class:new( props )
+    local instance = setmetatable(props, self)
     instance.__index = instance
     return instance
 end
@@ -94,6 +113,9 @@ local function var_export( data, margin )
     elseif 'table' ~= kind then
         return tostring(data)
     end
+    if rawget(data, '__class') then
+        return '<' .. data.__class .. '>'
+    end
     local table, export, fields = data, "{\n", {
         __class = true,
         __index = true
@@ -107,19 +129,17 @@ local function var_export( data, margin )
         end
         table = getmetatable(table)
     end
-    export = export:sub(1, -3) .. "\n}"
+    export = export:sub(1, -3) .. "\n" .. margin .. '}'
     if data.__class then
         export = '<' .. data.__class .. '> ' .. export
     end
     return export
 end
 
--- 转化为字符串
+--- 转化为字符串
 -- @function __tostring
 -- @return string
 -- @usage local dump = tostring(instance)
-function component:__tostring()
+function class:__tostring()
     return var_export(self)
 end
-
-return component
