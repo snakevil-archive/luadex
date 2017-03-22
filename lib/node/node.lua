@@ -20,16 +20,16 @@ node.uri = ''
 node.type = 'unknown'
 
 --- 获取元信息表
--- @function meta
+-- @function metadata
 -- @return table
--- @usage local meta = node:meta()
-function node:meta()
+-- @usage local metadata = node:metadata()
+function node:metadata()
     if not self._meta then
         self._meta = {}
-        local path = self.path .. '/meta.json'
+        local path = self.path .. '/mdata.yml'
         if 'file' == lfs.attributes(path, 'mode') then
             local file = io.open(path)
-            self._meta = require'cjson'.decode(file:read'*a')
+            self._meta = require'lyaml'.load(file:read'*a')
             file:close()
         end
     end
@@ -47,7 +47,7 @@ function node:new( path, uri )
         path = path,
         uri = uri
     })
-    for k, v in pairs(instance:meta()) do
+    for k, v in pairs(instance:metadata()) do
         if not rawget(instance, k) then
             instance[k] = v
         end

@@ -5,7 +5,7 @@ require 'class'
 -- 此节点应包含以下文件：
 -- * cover.jpg - 封皮图片
 -- * movie.mp4 - 影片视频
--- * meta.json - 元信息文件
+-- * mdata.yml - 元信息文件
 -- @module node/movie
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type Node.Movie
@@ -26,7 +26,7 @@ function movie.test( path )
     local exists = lfs.attributes
     return exists(path .. '/cover.jpg', 'mode')
         and exists(path .. '/movie.mp4', 'mode')
-        and exists(path .. '/meta.json', 'mode')
+        and exists(path .. '/mdata.yml', 'mode')
 end
 
 return movie
