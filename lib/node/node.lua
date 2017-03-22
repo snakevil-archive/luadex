@@ -19,6 +19,23 @@ node.uri = ''
 -- @field type
 node.type = 'unknown'
 
+--- 获取元信息表
+-- @function meta
+-- @return table
+-- @usage local meta = node:meta()
+function node:meta()
+    if not self._meta then
+        self._meta = {}
+        local path = self.path .. '/meta.json'
+        if 'file' == lfs.attributes(path, 'mode') then
+            local file = io.open(path)
+            self._meta = require'cjson'.decode(file:read'*a')
+            file:close()
+        end
+    end
+    return self._meta
+end
+
 --- 重载生成类实例方法
 -- @function new
 -- @param path 路径
@@ -26,10 +43,16 @@ node.type = 'unknown'
 -- @return Node.Node
 -- @usage local node = node:new'/var/www'
 function node:new( path, uri )
-    return node:super().new(self, {
+    local instance = node:super().new(self, {
         path = path,
         uri = uri
     })
+    for k, v in pairs(instance:meta()) do
+        if not rawget(instance, k) then
+            instance[k] = v
+        end
+    end
+    return instance
 end
 
 --- 检查路径是否符合节点特征
