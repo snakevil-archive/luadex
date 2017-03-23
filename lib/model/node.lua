@@ -7,6 +7,10 @@ require 'class'
 -- @type Model.Node
 local node = class'Model.Node'
 
+--- 类型
+-- @field type
+node.type = 'node'
+
 --- 路径
 -- @field path
 node.path = ''
@@ -15,9 +19,9 @@ node.path = ''
 -- @field uri
 node.uri = ''
 
---- 类型
--- @field type
-node.type = 'unknown'
+--- 名称
+-- @field name
+node.name = ''
 
 --- 获取元信息表
 -- @function metadata
@@ -47,6 +51,9 @@ function node:new( path, uri )
         path = path,
         uri = uri
     })
+    for part in path:gmatch'[^/]+' do
+        self.name = part
+    end
     for k, v in pairs(instance:metadata()) do
         if not rawget(instance, k) then
             instance[k] = v
@@ -73,7 +80,11 @@ function node:parent()
     for part in self.path:gmatch'[^/]+' do
         table.insert(paths, part)
     end
-    return class.load'Model.Factory':parse('/' .. table.concat(paths, '/', 1, #paths - 1))
+    local factory = class.load'Model.Factory'
+    local succeed, parent = pcall(factory.parse, factory, '/' .. table.concat(paths, '/', 1, #paths - 1))
+    if succeed then
+        return parent
+    end
 end
 
 --- 获取根节点
