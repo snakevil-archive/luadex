@@ -1,10 +1,10 @@
 require 'class'
 
 --- 节点工厂组件
--- @module node/factory
+-- @module model/factory
 -- @author Snakevil Zen <zsnakevil@gmail.com>
--- @type Node.Factory
-local factory = class'Node.Factory'
+-- @type Model.Factory
+local factory = class'Model.Factory'
 
 --- 根目录路径
 -- @field _root
@@ -19,7 +19,7 @@ factory._prefix = ''
 -- @function pair
 -- @param path 已知路径
 -- @param uri 相应 URI
--- @return Node.Factory
+-- @return Model.Factory
 -- @usage factory:pair('/data/video/g/2016', '/v/g/2016')
 function factory:pair( path, uri )
     local paths, uris, level = {}, {}, 0
@@ -44,16 +44,16 @@ factory._nodes = {}
 --- 可用节点类型
 -- @field _types
 factory._types = {
-    class.load'Node.Actors',
-    class.load'Node.Series',
-    class.load'Node.Movie',
-    class.load'Node.Node'
+    class.load'Model.Actors',
+    class.load'Model.Series',
+    class.load'Model.Movie',
+    class.load'Model.Node'
 }
 
 --- 根据路径生成节点
 -- @function parse
 -- @param path 路径
--- @return Node.Node
+-- @return Model.Node
 -- @usage local movie = factory:parse'/var/www/g/2016/tom.and.jerry'
 function factory:parse( path )
     if self._nodes[path] then
@@ -75,7 +75,7 @@ end
 
 --- 获取根节点
 -- @function root
--- @return Node.Node
+-- @return Model.Node
 -- @usage local root = factory:root()
 function factory:root()
     return self:parse(self._root)

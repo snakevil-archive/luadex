@@ -2,12 +2,12 @@ require 'class'
 
 --- 演员索引节点组件
 -- 此节点目录名称必须为「@」。
--- @module node/actors
+-- @module model/actors
 -- @author Snakevil Zen <zsnakevil@gmail.com>
--- @type Node.Actors
+-- @type Model.Actors
 -- @field path 路径
 -- @field uri URI
-local actors = class'Node.Actors':extends'Node.Node'
+local actors = class'Model.Actors':extends'Model.Node'
 
 --- 类型
 -- @field type

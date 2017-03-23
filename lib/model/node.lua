@@ -2,10 +2,10 @@ require 'lfs'
 require 'class'
 
 --- 抽象节点组件
--- @module node/node
+-- @module model/node
 -- @author Snakevil Zen <zsnakevil@gmail.com>
--- @type Node.Node
-local node = class'Node.Node'
+-- @type Model.Node
+local node = class'Model.Node'
 
 --- 路径
 -- @field path
@@ -40,7 +40,7 @@ end
 -- @function new
 -- @param path 路径
 -- @param uri URI
--- @return Node.Node
+-- @return Model.Node
 -- @usage local node = node:new'/var/www'
 function node:new( path, uri )
     local instance = node:super().new(self, {
@@ -66,22 +66,22 @@ end
 
 --- 获取父节点
 -- @function parent
--- @return Node.Node
+-- @return Model.Node
 -- @usage local parent = node:parent()
 function node:parent()
     local paths = {}
     for part in self.path:gmatch'[^/]+' do
         table.insert(paths, part)
     end
-    return class.load'Node.Factory':parse('/' .. table.concat(paths, '/', 1, #paths - 1))
+    return class.load'Model.Factory':parse('/' .. table.concat(paths, '/', 1, #paths - 1))
 end
 
 --- 获取根节点
 -- @function root
--- @return Node.Node
+-- @return Model.Node
 -- @usage local root = node:root()
 function node:root()
-    return class.load'Node.Factory':root()
+    return class.load'Model.Factory':root()
 end
 
 -- 获取子节点表
@@ -92,7 +92,7 @@ function node:children()
     if not self._children then
         self._children = {}
         self._files = {}
-        local factory = class.load'Node.Factory'
+        local factory = class.load'Model.Factory'
         for file in lfs.dir(self.path) do
             repeat
                 if '.' == file or '..' == file then

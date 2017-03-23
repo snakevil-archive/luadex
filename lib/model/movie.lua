@@ -6,12 +6,12 @@ require 'class'
 -- * cover.jpg - 封皮图片
 -- * movie.mp4 - 影片视频
 -- * mdata.yml - 元信息文件
--- @module node/movie
+-- @module model/movie
 -- @author Snakevil Zen <zsnakevil@gmail.com>
--- @type Node.Movie
+-- @type Model.Movie
 -- @field path 路径
 -- @field uri URI
-local movie = class'Node.Movie':extends'Node.Node'
+local movie = class'Model.Movie':extends'Model.Node'
 
 --- 类型
 -- @field type
