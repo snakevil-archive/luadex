@@ -23,10 +23,10 @@ movie.type = 'movie'
 -- @return boolean
 -- @usage local matched = movie.test'/var/www'
 function movie.test( path )
-    local exists = lfs.attributes
-    return exists(path .. '/cover.jpg', 'mode')
-        and exists(path .. '/movie.mp4', 'mode')
-        and exists(path .. '/mdata.yml', 'mode')
+    local function exists( file )
+        return 'file' == lfs.attributes(path .. '/' .. file, 'mode')
+    end
+    return exists('cover.jpg') and exists('movie.mp4') and exists('mdata.yml')
 end
 
 return movie
