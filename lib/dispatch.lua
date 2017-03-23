@@ -10,5 +10,5 @@ require 'class'
 return function ( path, uri )
     local node = class.load'Model.Factory':pair(path, uri):parse(path)
     local page = class.load'View.Factory':parse(node)
-    print(page)
+    return tostring(page)
 end
