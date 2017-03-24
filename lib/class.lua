@@ -116,7 +116,7 @@ local function var_export( data, margin )
     if rawget(data, '__class') then
         return '<' .. data.__class .. '>'
     end
-    local table, export, fields = data, "{\n", {
+    local table, export, empty, fields = data, "{\n", true, {
         __class = true,
         __index = true
     }
@@ -124,12 +124,17 @@ local function var_export( data, margin )
         for k, v in pairs(table) do
             if not fields[k] then
                 fields[k] = true
+                empty = false
                 export = export .. margin .. indent .. k .. ' = ' .. var_export(v, margin .. indent) .. ",\n"
             end
         end
         table = getmetatable(table)
     end
-    export = export:sub(1, -3) .. "\n" .. margin .. '}'
+    if empty then
+        export = export:sub(1, -2) .. '}'
+    else
+        export = export:sub(1, -3) .. "\n" .. margin .. '}'
+    end
     if data.__class then
         export = '<' .. data.__class .. '> ' .. export
     end
@@ -142,4 +147,12 @@ end
 -- @usage local dump = tostring(instance)
 function class:__tostring()
     return var_export(self)
+end
+
+--- 打印数据内容
+-- @function dump
+-- @param data 任意数据
+-- @usage class.dump(data)
+function class.dump( data )
+    print(var_export(data))
 end
