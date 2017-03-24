@@ -52,7 +52,7 @@ function node:new( path, uri )
         path = path,
         uri = uri
     })
-    for part in path:gmatch'[^/]+' do
+    for part in uri:gmatch'[^/]+' do
         self.name = part
     end
     for k, v in pairs(instance:metadata()) do

@@ -32,8 +32,8 @@ function factory:pair( path, uri )
     while paths[#paths - level] == uris[#uris - level] do
         level = 1 + level
     end
-    factory._root = '/' .. table.concat(paths, '/', 1, #paths - level)
-    factory._prefix = '/' .. table.concat(uris, '/', 1, #uris - level)
+    factory._root = '/' .. table.concat(paths, '/', 1, #paths - level) .. '/'
+    factory._prefix = '/' .. table.concat(uris, '/', 1, #uris - level) .. '/'
     return factory
 end
 
@@ -56,13 +56,16 @@ factory._types = {
 -- @return Model.Node
 -- @usage local movie = factory:parse'/var/www/g/2016/tom.and.jerry'
 function factory:parse( path )
+    if '/' ~= path:sub(-1) then
+        path = path .. '/'
+    end
     if self._nodes[path] then
         return self._nodes[path]
     end
     if '' == self._root then
         error('node factory not paired.')
     end
-    if self._root ~= path and self._root .. '/' ~= path:sub(1, 1 + #self._root) then
+    if self._root ~= path:sub(1, #self._root) then
         error('out of node factory root.')
     end
     for _, node in pairs(self._types) do
