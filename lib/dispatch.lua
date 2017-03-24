@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 派发
 -- @module dispatch

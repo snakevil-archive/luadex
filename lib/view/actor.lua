@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 演员节点页面组件
 -- @module view/actor

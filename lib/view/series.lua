@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 系列节点页面组件
 -- @module view/series

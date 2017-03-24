@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 影片索引页面组件
 -- @module view/movieset

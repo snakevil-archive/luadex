@@ -5,7 +5,7 @@ if not ngx.var.luadex then
 end
 
 local incpath = ngx.var.luadex .. '/lib/?.lua;'
-if package.path:sub(1, #incpatch) ~= incpath then
+if package.path:sub(1, #incpath) ~= incpath then
     package.path = incpath .. package.path
 end
 

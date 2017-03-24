@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 基础节点页面组件
 -- @module view/node

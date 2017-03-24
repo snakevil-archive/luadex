@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 系列索引节点组件
 -- 此节点目录名称必须为「=」。

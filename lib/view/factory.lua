@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 页面工厂组件
 -- @module view/factory

@@ -1,5 +1,5 @@
 require 'lfs'
-require 'class'
+local class = require 'class'
 
 --- 影片节点组件
 -- 此节点应包含以下文件：

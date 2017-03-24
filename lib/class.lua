@@ -3,7 +3,7 @@
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type Base
 -- @field __class 类名
-class = setmetatable({
+local class = setmetatable({
     __class = 'Base'
 }, {
     __call = function ( self, name )
@@ -156,3 +156,5 @@ end
 function class.dump( data )
     print(var_export(data))
 end
+
+return class

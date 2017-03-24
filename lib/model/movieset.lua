@@ -1,5 +1,5 @@
 require 'lfs'
-require 'class'
+local class = require 'class'
 
 --- 影片索引节点组件
 -- 包含影片节点的父节点都可视为本类型节点。

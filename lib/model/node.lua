@@ -1,5 +1,5 @@
 require 'lfs'
-require 'class'
+local class = require 'class'
 
 --- 基础节点组件
 -- 如无法匹配任意其它类型节点的特征时，作为退路机制进行处理。

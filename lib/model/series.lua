@@ -1,4 +1,4 @@
-require 'class'
+local class = require 'class'
 
 --- 系列节点组件
 -- 影片索引节点的一种精化节点，应包含以下文件：

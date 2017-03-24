@@ -1,5 +1,5 @@
 require 'lfs'
-require 'class'
+local class = require 'class'
 
 --- 节点工厂组件
 -- @module model/factory
