@@ -9,7 +9,7 @@ require 'class'
 -- @type Model.Actor
 -- @field path 路径
 -- @field uri URI
-local actor = class'Model.Actor':extends'Model.List'
+local actor = class'Model.Actor':extends'Model.MovieSet'
 
 --- 类型
 -- @field type
@@ -19,7 +19,7 @@ actor.type = 'actor'
 -- @function test
 -- @param path 路径
 -- @return boolean
--- @usage local matched = actor.test'/var/www'
+-- @usage local matched = actor.test'/var/www/'
 function actor.test( path )
     if not actor:super().test(path) then
         return false

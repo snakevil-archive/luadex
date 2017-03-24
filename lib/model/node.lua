@@ -46,7 +46,7 @@ end
 -- @param path 路径
 -- @param uri URI
 -- @return Model.Node
--- @usage local node = node:new'/var/www'
+-- @usage local node = node:new('/var/www/', '/')
 function node:new( path, uri )
     local instance = node:super().new(self, {
         path = path,
@@ -67,7 +67,7 @@ end
 -- @function test
 -- @param path 路径
 -- @return boolean
--- @usage local matched = node.test'/var/www'
+-- @usage local matched = node.test'/var/www/'
 function node.test( path )
     return true
 end

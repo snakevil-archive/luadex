@@ -48,8 +48,11 @@ factory._nodes = {}
 --- 可用节点类型
 -- @field _types
 factory._types = {
-    class.load'Model.Actors',
+    class.load'Model.ActorSet',
+    class.load'Model.SeriesSet',
+    class.load'Model.Actor',
     class.load'Model.Series',
+    class.load'Model.MovieSet',
     class.load'Model.Movie',
     class.load'Model.Node'
 }

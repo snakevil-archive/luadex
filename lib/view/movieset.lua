@@ -1,9 +1,9 @@
 require 'class'
 
 --- 影片索引页面组件
--- @module view/list
+-- @module view/movieset
 -- @author Snakevil Zen <zsnakevil@gmail.com>
--- @type View.List
-local page = class'View.List':extends'View.Node'
+-- @type View.MovieSet
+local page = class'View.MovieSet':extends'View.Node'
 
 return page

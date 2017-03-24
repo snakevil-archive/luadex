@@ -1,9 +1,9 @@
 require 'class'
 
 --- 演员索引节点页面组件
--- @module view/actors
+-- @module view/actorset
 -- @author Snakevil Zen <zsnakevil@gmail.com>
--- @type View.Actors
-local page = class'View.Actors':extends'View.Node'
+-- @type View.ActorSet
+local page = class'View.ActorSet':extends'View.Node'
 
 return page

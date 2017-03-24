@@ -26,7 +26,7 @@ movie.info = {}
 -- @param path 路径
 -- @param uri URI
 -- @return Model.Node
--- @usage local movie = movie:new'/var/www'
+-- @usage local movie = movie:new'/var/www/'
 function movie:new( path, uri )
     local instance = movie:super().new(self, path, uri)
     instance.name = instance.title
@@ -53,7 +53,7 @@ end
 -- @function test
 -- @param path 路径
 -- @return boolean
--- @usage local matched = movie.test'/var/www'
+-- @usage local matched = movie.test'/var/www/'
 function movie.test( path )
     local function exists( file )
         return 'file' == lfs.attributes(path .. file, 'mode')

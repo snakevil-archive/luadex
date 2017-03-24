@@ -3,23 +3,23 @@ require 'class'
 
 --- 影片索引节点组件
 -- 包含影片节点的父节点都可视为本类型节点。
--- @module model/list
+-- @module model/movieset
 -- @author Snakevil Zen <zsnakevil@gmail.com>
--- @type Model.List
+-- @type Model.MovieSet
 -- @field path 路径
 -- @field uri URI
-local list = class'Model.List':extends'Model.Node'
+local movies = class'Model.MovieSet':extends'Model.Node'
 
 --- 类型
 -- @field type
-list.type = 'list'
+movies.type = 'movieset'
 
 --- 检查路径是否符合节点特征
 -- @function test
 -- @param path 路径
 -- @return boolean
--- @usage local matched = list.test'/var/www'
-function list.test( path )
+-- @usage local matched = movies.test'/var/www/'
+function movies.test( path )
     local function mode( file )
         return lfs.attributes(path .. '/' .. file, 'mode')
     end
@@ -40,4 +40,4 @@ function list.test( path )
     return false
 end
 
-return movie
+return movies

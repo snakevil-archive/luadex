@@ -15,8 +15,7 @@ function factory:parse( node )
     if not node.type then
         error('invalid node')
     end
-    local name = 'View.' .. node.type:sub(1, 1):upper() .. node.type:sub(2, #node.type)
-    return class.load(name):new(node)
+    return class.load(node.__class:gsub('^Model%.', 'View.')):new(node)
 end
 
 return factory:new{}

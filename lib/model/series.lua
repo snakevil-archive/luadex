@@ -1,13 +1,14 @@
 require 'class'
 
---- 系列索引节点组件
--- 此节点目录名称必须为「=」。
+--- 系列节点组件
+-- 影片索引节点的一种精化节点，应包含以下文件：
+-- * mdata.yml - 元信息文件
 -- @module model/series
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type Model.Series
 -- @field path 路径
 -- @field uri URI
-local series = class'Model.Series':extends'Model.Node'
+local series = class'Model.Series':extends'Model.MovieSet'
 
 --- 类型
 -- @field type
@@ -17,13 +18,15 @@ series.type = 'series'
 -- @function test
 -- @param path 路径
 -- @return boolean
--- @usage local matched = series.test'/var/www'
+-- @usage local matched = series.test'/var/www/'
 function series.test( path )
-    local parts = {}
-    for part in path:gmatch'[^/]+' do
-        table.insert(parts, part)
+    if not series:super().test(path) then
+        return false
     end
-    return '=' == parts[#parts]
+    local function exists( file )
+        return 'file' == lfs.attributes(path .. '/' .. file, 'mode')
+    end
+    return exists('mdata.yml')
 end
 
 return series

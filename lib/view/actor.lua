@@ -4,6 +4,6 @@ require 'class'
 -- @module view/actor
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type View.Actor
-local page = class'View.Actor':extends'View.Node'
+local page = class'View.Actor':extends'View.MovieSet'
 
 return page
