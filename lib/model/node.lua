@@ -136,12 +136,12 @@ function node:files()
 end
 
 --- 获取演员索引节点
--- @function seekActors
+-- @function actorset
 -- @return Model.Node
--- @usage local actors = node:seekActors()
-function node:seekActors()
+-- @usage local actors = node:actorset()
+function node:actorset()
     if not self._actors then
-        self._actors = class.load'Model.Factory':actors(self.path) or ''
+        self._actors = class.load'Model.Factory':actorset(self.path) or ''
     end
     if '' ~= self._actors then
         return self._actors
@@ -149,12 +149,12 @@ function node:seekActors()
 end
 
 --- 获取系列索引节点
--- @function seekSeries
+-- @function seriesset
 -- @return Model.Node
--- @usage local actors = node:seekSeries()
-function node:seekSeries()
+-- @usage local actors = node:seriesset()
+function node:seriesset()
     if not self._series then
-        self._series = class.load'Model.Factory':series(self.path) or ''
+        self._series = class.load'Model.Factory':seriesset(self.path) or ''
     end
     if '' ~= self._series then
         return self._series

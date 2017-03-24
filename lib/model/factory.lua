@@ -92,11 +92,11 @@ function factory:root()
 end
 
 --- 获取与路径最相近的演员索引节点
--- @function actors
+-- @function actorset
 -- @param path 路径
--- @return Model.Actors
--- @usage local actors = factory:actors'/var/www/g/2016/tom.and.jerry/'
-function factory:actors( path )
+-- @return Model.ActorSet
+-- @usage local actorset = factory:actorset'/var/www/g/2016/tom.and.jerry/'
+function factory:actorset( path )
     local suffix, exists, paths = '', function (path)
         return 'directory' == lfs.attributes(path, 'mode')
     end, {
@@ -115,11 +115,11 @@ function factory:actors( path )
 end
 
 --- 获取与路径最相近的系列索引节点
--- @function series
+-- @function seriesset
 -- @param path 路径
--- @return Model.Series
--- @usage local series = factory:series'/var/www/g/2016/tom.and.jerry/'
-function factory:series( path )
+-- @return Model.SeriesSet
+-- @usage local seriesset = factory:seriesset'/var/www/g/2016/tom.and.jerry/'
+function factory:seriesset( path )
     local suffix, exists, paths = '', function (path)
         return 'directory' == lfs.attributes(path, 'mode')
     end, {

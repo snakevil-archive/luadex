@@ -76,8 +76,8 @@ function page:body( cosmo )
       <ul class="list-inline">
         $node|actress[[
           <li>
-            $if{ $actors }[[
-              <a href="$actors|uri$it/">$it</a>
+            $if{ $actorset }[[
+              <a href="$actorset|uri$it/">$it</a>
             ]][[
               $it
             ]]
@@ -97,8 +97,8 @@ function page:body( cosmo )
       $if{ $node|series }[[
         <dt>Series</dt>
         <dd>
-          $if{ $series }[[
-            <a href="$series|uri$node|series/">$node|series</a>
+          $if{ $seriesset }[[
+            <a href="$seriesset|uri$node|series/">$node|series</a>
           ]][[
             $node|series
           ]]
@@ -116,8 +116,8 @@ function page:body( cosmo )
 ]=]{
     ['if'] = cosmo.cif,
     node = self.node,
-    actors = self.node:seekActors(),
-    series = self.node:seekSeries()
+    actorset = self.node:actorset(),
+    seriesset = self.node:seriesset()
 }
 end
 
