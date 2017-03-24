@@ -43,7 +43,7 @@ function page:__tostring()
     <div class="container">
       <ol class="breadcrumb">
         $hierachy[[
-        <li><a href="$uri">$name</a></li>
+          <li><a href="$uri">$name</a></li>
         ]]
       </ol>
       $header
@@ -133,20 +133,20 @@ function page:body( cosmo )
   <table class="table table-hover">
     <tbody>
       $folders[[
-      <tr>
-        <td>
-          <a href="$uri">$name</a>/
-        </td>
-      </tr>
+        <tr>
+          <td>
+            <a href="$uri">$name</a>/
+          </td>
+        </tr>
       ]]
     </tbody>
     <tbody>
       $files[[
-      <tr>
-        <td>
+        <tr>
+          <td>
             <a href="$prefix$it">$it</a>
-        </td>
-      </tr>
+          </td>
+        </tr>
       ]]
     </tbody>
   </table>

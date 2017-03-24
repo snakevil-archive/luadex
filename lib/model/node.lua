@@ -56,7 +56,7 @@ function node:new( path, uri )
         instance.name = part
     end
     for k, v in pairs(instance:metadata()) do
-        if not rawget(instance, k) then
+        if not rawget(instance, k) and 'function' ~= type(instance[k]) then
             instance[k] = v
         end
     end
@@ -133,6 +133,32 @@ function node:files()
         self:children()
     end
     return self._files
+end
+
+--- 获取演员索引节点
+-- @function seekActors
+-- @return Model.Node
+-- @usage local actors = node:seekActors()
+function node:seekActors()
+    if not self._actors then
+        self._actors = class.load'Model.Factory':actors(self.path) or ''
+    end
+    if '' ~= self._actors then
+        return self._actors
+    end
+end
+
+--- 获取系列索引节点
+-- @function seekSeries
+-- @return Model.Node
+-- @usage local actors = node:seekSeries()
+function node:seekSeries()
+    if not self._series then
+        self._series = class.load'Model.Factory':series(self.path) or ''
+    end
+    if '' ~= self._series then
+        return self._series
+    end
 end
 
 return node

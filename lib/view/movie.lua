@@ -72,41 +72,52 @@ function page:body( cosmo )
     return cosmo.f[=[
 <div class="panel panel-info">
   $if{ $node|actress }[[
-  <div class="panel-heading">
-    <ul class="list-inline">
-      $node|actress[[
-      <li>$it</li>
-      ]]
-    </ul>
-  </div>
+    <div class="panel-heading">
+      <ul class="list-inline">
+        $node|actress[[
+          <li>
+            $if{ $actors }[[
+              <a href="$actors|uri$it/">$it</a>
+            ]][[
+              $it
+            ]]
+          </li>
+        ]]
+      </ul>
+    </div>
   ]]
   <div class="panel-body">
     <dl class="dl-horizontal">
       $if{ $node|id }[[
-      <dt>ID</dt>
-      <dd>$node|id</dd>
+        <dt>ID</dt>
+        <dd>$node|id</dd>
       ]]
       <dt>Year</dt>
       <dd>$node|date</dd>
       $if{ $node|series }[[
-      <dt>Series</dt>
-      <dd>$node|series</dd>
+        <dt>Series</dt>
+        <dd>
+          $if{ $series }[[
+            <a href="$series|uri$node|series/">$node|series</a>
+          ]][[
+            $node|series
+          ]]
+        </dd>
       ]]
       <dt>Summary</dt>
       <dd>$node|summary</dd>
     </dl>
   </div>
   <div class="panel-footer text-right">
-    $node|info|video|display_aspect_ratio
-    $node|info|general|overall_bit_rate
-    $node|info|video|format
-    +
-    $node|info|audio|format
+    $node|info|video|display_aspect_ratio $node|info|general|overall_bit_rate
+    $node|info|video|format+$node|info|audio|format
   </div>
 </div>
 ]=]{
     ['if'] = cosmo.cif,
-    node = self.node
+    node = self.node,
+    actors = self.node:seekActors(),
+    series = self.node:seekSeries()
 }
 end
 

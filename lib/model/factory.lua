@@ -21,7 +21,7 @@ factory._prefix = ''
 -- @param path 已知路径
 -- @param uri 相应 URI
 -- @return Model.Factory
--- @usage factory:pair('/data/video/g/2016', '/v/g/2016')
+-- @usage factory:pair('/data/video/g/2016/', '/v/g/2016/')
 function factory:pair( path, uri )
     local paths, uris, level = {}, {}, 0
     for part in path:gmatch'[^/]+' do
@@ -58,7 +58,7 @@ factory._types = {
 -- @function parse
 -- @param path 路径
 -- @return Model.Node
--- @usage local movie = factory:parse'/var/www/g/2016/tom.and.jerry'
+-- @usage local movie = factory:parse'/var/www/g/2016/tom.and.jerry/'
 function factory:parse( path )
     if self._nodes[path] then
         return self._nodes[path]
@@ -86,6 +86,52 @@ end
 -- @usage local root = factory:root()
 function factory:root()
     return self:parse(self._root)
+end
+
+--- 获取与路径最相近的演员索引节点
+-- @function actors
+-- @param path 路径
+-- @return Model.Actors
+-- @usage local actors = factory:actors'/var/www/g/2016/tom.and.jerry/'
+function factory:actors( path )
+    local suffix, exists, paths = '', function (path)
+        return 'directory' == lfs.attributes(path, 'mode')
+    end, {
+        self._root .. '@/'
+    }
+    for part in path:sub(1 + #self._root):gmatch'[^/]+' do
+        suffix = suffix .. part .. '/'
+        table.insert(paths, 1, self._root .. suffix .. '@/')
+    end
+    table.remove(paths, 1)
+    for _, path in ipairs(paths) do
+        if exists(path) then
+            return self:parse(path)
+        end
+    end
+end
+
+--- 获取与路径最相近的系列索引节点
+-- @function series
+-- @param path 路径
+-- @return Model.Series
+-- @usage local series = factory:series'/var/www/g/2016/tom.and.jerry/'
+function factory:series( path )
+    local suffix, exists, paths = '', function (path)
+        return 'directory' == lfs.attributes(path, 'mode')
+    end, {
+        self._root .. '=/'
+    }
+    for part in path:sub(1 + #self._root):gmatch'[^/]+' do
+        suffix = suffix .. part .. '/'
+        table.insert(paths, 1, self._root .. suffix .. '=/')
+    end
+    table.remove(paths, 1)
+    for _, path in ipairs(paths) do
+        if exists(path) then
+            return self:parse(path)
+        end
+    end
 end
 
 return factory:new{}
