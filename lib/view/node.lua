@@ -66,7 +66,9 @@ function page:__tostring()
         }
         while parent do
             uri = parent.uri
-            table.insert(hierachy, parent)
+            if '/' ~= uri then
+                table.insert(hierachy, parent)
+            end
             parent = parent:parent()
         end
         local uri2 = '/'

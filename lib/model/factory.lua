@@ -1,3 +1,4 @@
+require 'lfs'
 require 'class'
 
 --- 节点工厂组件
@@ -34,6 +35,9 @@ function factory:pair( path, uri )
     end
     factory._root = '/' .. table.concat(paths, '/', 1, #paths - level) .. '/'
     factory._prefix = '/' .. table.concat(uris, '/', 1, #uris - level) .. '/'
+    if '//' == factory._prefix then
+        factory._prefix = '/'
+    end
     return factory
 end
 
@@ -56,9 +60,6 @@ factory._types = {
 -- @return Model.Node
 -- @usage local movie = factory:parse'/var/www/g/2016/tom.and.jerry'
 function factory:parse( path )
-    if '/' ~= path:sub(-1) then
-        path = path .. '/'
-    end
     if self._nodes[path] then
         return self._nodes[path]
     end
@@ -67,6 +68,9 @@ function factory:parse( path )
     end
     if self._root ~= path:sub(1, #self._root) then
         error('out of node factory root.')
+    end
+    if 'file' == lfs.attributes(path, 'mode') then
+        error('file aint node.')
     end
     for _, node in pairs(self._types) do
         if node.test(path) then
