@@ -4,7 +4,10 @@ if not ngx.var.luadex then
     ngx.exit(ngx.OK)
 end
 
-package.path = ngx.var.luadex .. '/lib/?.lua;' .. package.path
+local incpath = ngx.var.luadex .. '/lib/?.lua;'
+if package.path:sub(1, #incpatch) ~= incpath then
+    package.path = incpath .. package.path
+end
 
 local succeed, html = pcall(require'dispatch', ngx.var.request_filename, ngx.var.request_uri)
 if not succeed then
