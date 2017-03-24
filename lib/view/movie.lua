@@ -14,6 +14,7 @@ local page = class'View.Movie':extends'View.Node'
 function page:css(cosmo)
   return [=[
 <link href="//cdn.bootcss.com/video.js/5.19.0/video-js.min.css" rel="stylesheet">
+<link href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css" rel="stylesheet">
 <style class="vjs-styles-defaults">
 .video\-js { margin: 0 auto }
 </style>
@@ -28,6 +29,8 @@ end
 function page:js(cosmo)
   return [=[
 <script src="//cdn.bootcss.com/video.js/5.19.0/video.min.js"></script>
+<script src="//cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
+<script src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js"></script>
 ]=]
 end
 
@@ -88,12 +91,6 @@ function page:body( cosmo )
   ]]
   <div class="panel-body">
     <dl class="dl-horizontal">
-      $if{ $node|id }[[
-        <dt>ID</dt>
-        <dd>$node|id</dd>
-      ]]
-      <dt>Year</dt>
-      <dd>$node|date</dd>
       $if{ $node|series }[[
         <dt>Series</dt>
         <dd>
@@ -104,9 +101,34 @@ function page:body( cosmo )
           ]]
         </dd>
       ]]
-      <dt>Summary</dt>
-      <dd>$node|summary</dd>
+      $metag[[
+        <dt>$tag</dt>
+        <dd>$value</dd>
+      ]]
+      $if{ $node|links }[[
+        <dt>References</dt>
+        <dd>
+          <ul class="list-unstyled">
+            $links[[
+              <li>
+                <a href="$url" target="_blank">$title</a>
+              </li>
+            ]]
+          </ul>
+        </dd>
+      ]]
     </dl>
+    $if{ $snaps }[[
+      <div class="row" data-masonry='{"itemSelector":".col-lg-3"}'>
+        $snaps[[
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <a href="$node|uri$it" data-fancybox="snaps">
+              <img class="img-responsive img-thumbnail" src="$node|uri$it">
+            </a>
+          </div>
+        ]]
+      </div>
+    ]]
   </div>
   <div class="panel-footer text-right">
     $node|info|video|display_aspect_ratio $node|info|general|overall_bit_rate
@@ -117,7 +139,35 @@ function page:body( cosmo )
     ['if'] = cosmo.cif,
     node = self.node,
     actorset = self.node:actorset(),
-    seriesset = self.node:seriesset()
+    seriesset = self.node:seriesset(),
+    metag = function ()
+        for k, v in pairs(self.node:metadata()) do
+            if 'title' ~= k and 'series' ~= k and 'actress' ~= k and 'links' ~= k then
+                cosmo.yield{
+                    tag = k:sub(1, 1):upper() .. k:sub(2):lower(),
+                    value = v
+                }
+            end
+        end
+    end,
+    links = function ()
+        for k, v in pairs(self.node.links) do
+            cosmo.yield{
+                title = k,
+                url = v
+            }
+        end
+    end,
+    snaps = (function ()
+        local snaps = {}
+        for _, file in ipairs(self.node:files()) do
+            if 'snap-' == file:sub(1, 5) and '.jpg' == file:sub(-4) then
+                table.insert(snaps, file)
+            end
+        end
+        table.sort(snaps)
+        return snaps
+    end)()
 }
 end
 

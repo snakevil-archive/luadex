@@ -31,7 +31,7 @@ node.name = ''
 function node:metadata()
     if not self._meta then
         self._meta = {}
-        local path = self.path .. '/mdata.yml'
+        local path = self.path .. '/metag.yml'
         if 'file' == lfs.attributes(path, 'mode') then
             local file = io.open(path)
             self._meta = require'lyaml'.load(file:read'*a')

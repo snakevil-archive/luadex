@@ -30,7 +30,7 @@ function movies.test( path )
             end
             if 'file' == mode(file .. '/cover.jpg')
                 and 'file' == mode(file .. '/movie.mp4')
-                and 'file' == mode(file .. '/mdata.yml')
+                and 'file' == mode(file .. '/metag.yml')
                 then
                 return true
             end

@@ -51,9 +51,9 @@ factory._types = {
     class.load'Model.ActorSet',
     class.load'Model.SeriesSet',
     class.load'Model.Actor',
-    class.load'Model.Series',
     class.load'Model.MovieSet',
     class.load'Model.Movie',
+    class.load'Model.Series',
     class.load'Model.Node'
 }
 

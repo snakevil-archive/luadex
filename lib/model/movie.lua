@@ -5,7 +5,7 @@ require 'class'
 -- 此节点应包含以下文件：
 -- * cover.jpg - 封皮图片
 -- * movie.mp4 - 影片视频
--- * mdata.yml - 元信息文件
+-- * metag.yml - 元信息文件
 -- @module model/movie
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type Model.Movie
@@ -58,7 +58,7 @@ function movie.test( path )
     local function exists( file )
         return 'file' == lfs.attributes(path .. file, 'mode')
     end
-    return exists('cover.jpg') and exists('movie.mp4') and exists('mdata.yml')
+    return exists('cover.jpg') and exists('movie.mp4') and exists('metag.yml')
 end
 
 return movie
