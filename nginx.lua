@@ -6,4 +6,9 @@ end
 
 package.path = ngx.var.luadex .. '/lib/?.lua;' .. package.path
 
-ngx.say(require'dispatch'(ngx.var.request_filename, ngx.var.request_uri))
+local succeed, html = pcall(require'dispatch', ngx.var.request_filename, ngx.var.request_uri)
+if not succeed then
+    ngx.status = ngx.HTTP_SERVICE_UNAVAILABLE
+    html = html:gsub('^.+: ', '$luadex: ')
+end
+ngx.say(html)

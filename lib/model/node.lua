@@ -82,7 +82,7 @@ function node:parent()
         table.insert(paths, part)
     end
     local factory = class.load'Model.Factory'
-    local succeed, parent = pcall(factory.parse, factory, '/' .. table.concat(paths, '/', 1, #paths - 1))
+    local succeed, parent = pcall(factory.parse, factory, '/' .. table.concat(paths, '/', 1, #paths - 1) .. '/')
     if succeed then
         return parent
     end
@@ -115,7 +115,7 @@ function node:children()
                 if 'file' == mode then
                     table.insert(self._files, file)
                 elseif 'directory' == mode then
-                    table.insert(self._children, factory:parse(path))
+                    table.insert(self._children, factory:parse(path .. '/'))
                 end
                 break
             until true
