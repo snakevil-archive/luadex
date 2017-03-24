@@ -17,6 +17,38 @@ local movie = class'Model.Movie':extends'Model.Node'
 -- @field type
 movie.type = 'movie'
 
+--- 视频信息
+-- @field info
+movie.info = {}
+
+--- 重载生成类实例方法
+-- @function new
+-- @param path 路径
+-- @param uri URI
+-- @return Model.Node
+-- @usage local movie = movie:new'/var/www'
+function movie:new( path, uri )
+    local instance = movie:super().new(self, path, uri)
+    instance.name = instance.title
+    if instance.actress and 'table' ~= instance.actress then
+        instance.actress = {
+            instance.actress
+        }
+    end
+    local info, kind = io.popen('mediainfo ' .. path .. 'movie.mp4'), nil
+    for line in info:lines() do
+        local pos1, pos2 = line:find(' : ', 1, true)
+        if pos1 then
+            instance.info[kind][line:sub(1, pos1):gsub('[^%w]+', '_'):gsub('_+$', ''):lower()] = line:sub(1 + pos2)
+        elseif '' ~= line then
+            kind = line:lower()
+            instance.info[kind] = {}
+        end
+    end
+    info:close()
+    return instance
+end
+
 --- 检查路径是否符合节点特征
 -- @function test
 -- @param path 路径
@@ -24,7 +56,7 @@ movie.type = 'movie'
 -- @usage local matched = movie.test'/var/www'
 function movie.test( path )
     local function exists( file )
-        return 'file' == lfs.attributes(path .. '/' .. file, 'mode')
+        return 'file' == lfs.attributes(path .. file, 'mode')
     end
     return exists('cover.jpg') and exists('movie.mp4') and exists('mdata.yml')
 end

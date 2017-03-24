@@ -36,6 +36,7 @@ function page:__tostring()
   <title>$node|name - Luadex</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  $css
 </head>
 <body>
   <div class="jumbotron">
@@ -53,9 +54,12 @@ function page:__tostring()
   </div>
   <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  $js
 </body>
 </html>
 ]=]{
+    css = self:css(cosmo),
+    js = self:js(cosmo),
     node = self.node,
     hierachy = (function ()
         local parent, uri, uri2, hierachy = self.node:parent(), '', '', {
@@ -91,6 +95,24 @@ function page:__tostring()
 }:gsub('>%s+', '>'):gsub('%s+<', '<')
 end
 
+--- 扩展页面样式表链接
+-- @function css
+-- @param cosmo
+-- @return string
+-- @usage local html = page:css(cosmo)
+function page:css(cosmo)
+  return ''
+end
+
+--- 扩展页面脚本链接
+-- @function js
+-- @param cosmo
+-- @return string
+-- @usage local html = page:js(cosmo)
+function page:js(cosmo)
+  return ''
+end
+
 --- 生成页头部分 HTML
 -- @function header
 -- @param cosmo
@@ -122,7 +144,7 @@ function page:body( cosmo )
       $files[[
       <tr>
         <td>
-            <a href="$prefix$file">$file</a>
+            <a href="$prefix$it">$it</a>
         </td>
       </tr>
       ]]
@@ -132,13 +154,7 @@ function page:body( cosmo )
 ]=]{
     prefix = self.node.uri,
     folders = self.node:children(),
-    files = function ()
-        for _, file in ipairs(self.node:files()) do
-            cosmo.yield {
-                file = file
-            }
-        end
-    end
+    files = self.node:files()
 }
 end
 
