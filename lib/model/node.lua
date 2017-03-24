@@ -53,7 +53,7 @@ function node:new( path, uri )
         uri = uri
     })
     for part in uri:gmatch'[^/]+' do
-        self.name = part
+        instance.name = part
     end
     for k, v in pairs(instance:metadata()) do
         if not rawget(instance, k) then
@@ -110,12 +110,12 @@ function node:children()
                 if '.' == file or '..' == file then
                     break
                 end
-                local path = self.path .. '/' .. file
+                local path = self.path .. file
                 local mode = lfs.attributes(path, 'mode')
                 if 'file' == mode then
-                    self._files[file] = file
+                    table.insert(self._files, file)
                 elseif 'directory' == mode then
-                    self._children[file] = factory:parse(path)
+                    table.insert(self._children, factory:parse(path))
                 end
                 break
             until true
