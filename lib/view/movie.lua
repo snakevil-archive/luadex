@@ -16,7 +16,9 @@ function page:css(cosmo)
 <link href="//cdn.bootcss.com/video.js/5.19.0/video-js.min.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css" rel="stylesheet">
 <style class="vjs-styles-defaults">
+.jumbotron.end { margin-bottom: 0 }
 .video\-js { margin: 0 auto }
+.col\-lg\-3 { margin-bottom: 15px }
 </style>
 ]=]
 end
@@ -58,8 +60,8 @@ function page:header( cosmo )
   </div>
 </div>
 ]=]{
-    width = info.video.width:gsub(' p.+$', ''),
-    height = 0 + info.video.height:gsub(' p.+$', ''),
+    width = info.video.width:gsub(' p.+$', ''):gsub('%s+', ''),
+    height = 0 + info.video.height:gsub(' p.+$', ''):gsub('%s+', ''),
     ratio = info.video.display_aspect_ratio,
     ['if'] = cosmo.cif,
     title = self.node.name
@@ -74,10 +76,10 @@ end
 function page:body( cosmo )
     return cosmo.f[=[
 <div class="panel panel-info">
-  $if{ $node|actress }[[
+  $if{ $node|actors }[[
     <div class="panel-heading">
       <ul class="list-inline">
-        $node|actress[[
+        $node|actors[[
           <li>
             $if{ $actorset }[[
               <a href="$actorset|uri$it/">$it</a>
@@ -118,23 +120,23 @@ function page:body( cosmo )
         </dd>
       ]]
     </dl>
-    $if{ $snaps }[[
-      <div class="row" data-masonry='{"itemSelector":".col-lg-3"}'>
-        $snaps[[
-          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-            <a href="$node|uri$it" data-fancybox="snaps">
-              <img class="img-responsive img-thumbnail" src="$node|uri$it">
-            </a>
-          </div>
-        ]]
-      </div>
-    ]]
   </div>
   <div class="panel-footer text-right">
-    $node|info|video|display_aspect_ratio $node|info|general|overall_bit_rate
+    $node|info|video|display_aspect_ratio $bitrate
     $node|info|video|format+$node|info|audio|format
   </div>
 </div>
+$if{ $snaps }[[
+  <div class="row" data-masonry='{"itemSelector":".col-lg-3"}'>
+    $snaps[[
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <a href="$node|uri$it" data-fancybox="snaps">
+          <img class="img-responsive img-thumbnail" src="$node|uri$it">
+        </a>
+      </div>
+    ]]
+  </div>
+]]
 ]=]{
     ['if'] = cosmo.cif,
     node = self.node,
@@ -142,7 +144,7 @@ function page:body( cosmo )
     seriesset = self.node:seriesset(),
     metag = function ()
         for k, v in pairs(self.node:metadata()) do
-            if 'title' ~= k and 'series' ~= k and 'actress' ~= k and 'links' ~= k then
+            if 'title' ~= k and 'series' ~= k and 'actors' ~= k and 'links' ~= k then
                 cosmo.yield{
                     tag = k:sub(1, 1):upper() .. k:sub(2):lower(),
                     value = v
@@ -167,7 +169,8 @@ function page:body( cosmo )
         end
         table.sort(snaps)
         return snaps
-    end)()
+    end)(),
+    bitrate = self.node.info.general.overall_bit_rate:gsub('%s+', '')
 }
 end
 
