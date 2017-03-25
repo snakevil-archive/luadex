@@ -30,6 +30,9 @@ movie.info = {}
 function movie:new( path, uri )
     local instance = movie:super().new(self, path, uri)
     instance.name = instance.title
+    if instance.summary then
+        instance.summary = instance.summary:gsub('%s+', '')
+    end
     local info, kind = io.popen('mediainfo "' .. path .. 'movie.mp4"'), nil
     for line in info:lines() do
         local pos1, pos2 = line:find(' : ', 1, true)
@@ -54,6 +57,25 @@ function movie.test( path )
         return 'file' == lfs.attributes(path .. file, 'mode')
     end
     return exists('cover.jpg') and exists('movie.mp4') and exists('metag.yml')
+end
+
+-- 重载获取子节点表
+-- @function children
+-- @return table
+-- @usage local children = movie:children()
+function movie:children()
+    if not self._children then
+        movie:super().children(self)
+        local files = self._files
+        self._files = {}
+        for _, file in ipairs(files) do
+            if 'snap-' == file:sub(1, 5) and '.jpg' == file:sub(-4) then
+                table.insert(self._files, file)
+            end
+        end
+        table.sort(self._files)
+    end
+    return self._children
 end
 
 return movie

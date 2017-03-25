@@ -89,7 +89,7 @@ function page:body( cosmo )
                 if 'title' ~= k and 'series' ~= k and 'actors' ~= k and 'links' ~= k then
                     cosmo.yield{
                         tag = k:sub(1, 1):upper() .. k:sub(2):lower(),
-                        value = v
+                        value = v:gsub('%s+', '')
                     }
                 end
             end
@@ -102,16 +102,12 @@ function page:body( cosmo )
                 }
             end
         end,
-        snaps = (function ()
-            local snaps = {}
+        has_snaps = 0 < #self.node:files(),
+        snaps = function ()
             for _, file in ipairs(self.node:files()) do
-                if 'snap-' == file:sub(1, 5) and '.jpg' == file:sub(-4) then
-                    table.insert(snaps, file)
-                end
+                cosmo.yield(file)
             end
-            table.sort(snaps)
-            return snaps
-        end)(),
+        end,
         ratio = '16:9',
         bitrate = '',
         vformat = 'AVC',
@@ -175,7 +171,7 @@ function page:body( cosmo )
     $vformat+$aformat
   </div>
 </div>
-$if{ $snaps }[[
+$if{ $has_snaps }[[
   <div class="row" data-masonry='{"itemSelector":".col-lg-3"}'>
     $snaps[[
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
