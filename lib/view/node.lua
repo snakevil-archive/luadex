@@ -40,6 +40,7 @@ function page:__tostring()
   <title>$node|name - Luadex</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <style>.masonry .item{margin-bottom:15px}</style>
   $css
 </head>
 <body>
@@ -222,6 +223,39 @@ function page:body()
         end
     end
 }
+end
+
+--- 生成 Masonry 瀑布流控制脚本代码
+-- @function masonry
+-- @param container 容器选择器描述字符串
+-- @param item 项目子选择器描述字符串
+-- @return string
+-- @usage local html = page:masonry()
+function page:masonry( container, item )
+  return self.c.f[=[
+<script src="//cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
+<script>
+(function(m,n,i,j,k){
+  i=$$(m+' '+n+' img'),
+  j=0,
+  k=function(){
+    if(i.length==++j)
+      $$(m).masonry({
+        itemSelector:n
+      });
+  };
+  i.each(function(_){
+    _=this;
+    _.complete
+      ?k()
+      :_.onload=k;
+  });
+})($container,$item);
+</script>
+]=]{
+    container = string.format('%q', container or '.masonry'),
+    item = string.format('%q', item or '.item')
+}:gsub('\n%s*', '')
 end
 
 return page

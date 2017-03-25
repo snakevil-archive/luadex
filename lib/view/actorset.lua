@@ -6,26 +6,12 @@ local class = require 'class'
 -- @type View.ActorSet
 local page = class'View.ActorSet':extends'View.Node'
 
---- 扩展页面样式表链接
--- @function css
--- @return string
--- @usage local html = page:css()
-function page:css()
-  return [=[
-<style>
-.col\-lg\-4 { margin-bottom: 15px }
-</style>
-]=]
-end
-
 --- 扩展页面脚本链接
 -- @function js
 -- @return string
 -- @usage local html = page:js()
 function page:js()
-  return [=[
-<script src="//cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
-]=]
+  return page:super():masonry()
 end
 
 --- 生成正文部分 HTML
@@ -35,9 +21,9 @@ end
 function page:body()
     return self.c.f[=[
 $if{ $has_actors }[[
-  <div class="row" data-masonry='{"itemSelector":".col-lg-4"}'>
+  <div class="row masonry">
     $actors[[
-      <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+      <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 item">
         <a class="thumbnail" href="$uri">
           <img src="$uri./portrait.jpg">
           <div class="caption">

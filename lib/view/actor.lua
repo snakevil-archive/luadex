@@ -14,7 +14,6 @@ function page:css()
   return [=[
 <style>
 .media-object { max-width: 128px }
-.col\-lg\-4 { margin-bottom: 15px }
 .thumbnail {
   background-position: right;
   background-size: auto 100%;

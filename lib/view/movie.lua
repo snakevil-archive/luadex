@@ -14,9 +14,6 @@ function page:css()
   return [=[
 <link href="//cdn.bootcss.com/video.js/5.19.0/video-js.min.css" rel="stylesheet">
 <link href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css" rel="stylesheet">
-<style class="vjs-styles-defaults">
-.col\-lg\-3 { margin-bottom: 15px }
-</style>
 ]=]
 end
 
@@ -27,9 +24,8 @@ end
 function page:js()
   return [=[
 <script src="//cdn.bootcss.com/video.js/5.19.0/video.min.js"></script>
-<script src="//cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
 <script src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js"></script>
-]=]
+]=] .. page:super():masonry()
 end
 
 --- 生成页头部分 HTML
@@ -166,9 +162,9 @@ function page:body()
   </div>
 </div>
 $if{ $has_snaps }[[
-  <div class="row" data-masonry='{"itemSelector":".col-lg-3"}'>
+  <div class="row masonry">
     $snaps[[
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 item">
         <a href="$node|uri$it" data-fancybox="snaps">
           <img class="img-responsive img-thumbnail" src="$node|uri$it">
         </a>

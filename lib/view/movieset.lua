@@ -13,7 +13,6 @@ local page = class'View.MovieSet':extends'View.Node'
 function page:css()
   return [=[
 <style>
-.col\-lg\-4 { margin-bottom: 15px }
 .thumbnail {
   background-position: right;
   background-size: auto 100%;
@@ -31,9 +30,7 @@ end
 -- @return string
 -- @usage local html = page:js()
 function page:js()
-  return [=[
-<script src="//cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
-]=]
+  return page:super():masonry()
 end
 
 --- 生成正文部分 HTML
@@ -43,9 +40,9 @@ end
 function page:body()
     return self.c.f[=[
 $if{ $has_movies }[[
-  <div class="row" data-masonry='{"itemSelector":".col-lg-4"}'>
+  <div class="row masonry">
     $movies[[
-      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 item">
         <a class="thumbnail" href="$uri" style="background-image:url($uri./cover.jpg)">
           <img src="$uri./cover.jpg">
         </a>
