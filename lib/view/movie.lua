@@ -52,9 +52,9 @@ function page:header( cosmo )
     <h2>
       $title
       $if{ $height > 719 }[[
-        <span class="label label-primary">HD</span>
+        <span class="label label-success">HD</span>
       ]][[
-        <span class="label label-default">SD</span>
+        <span class="label label-warning">SD</span>
       ]]
     </h2>
   </div>
@@ -75,7 +75,7 @@ end
 -- @usage local html = page:body(cosmo)
 function page:body( cosmo )
     return cosmo.f[=[
-<div class="panel panel-info">
+<div class="panel panel-warning">
   $if{ $node|actors }[[
     <div class="panel-heading">
       <ul class="list-inline">
@@ -121,7 +121,7 @@ function page:body( cosmo )
       ]]
     </dl>
   </div>
-  <div class="panel-footer text-right">
+  <div class="panel-footer text-right text-danger">
     $node|info|video|display_aspect_ratio $bitrate
     $node|info|video|format+$node|info|audio|format
   </div>

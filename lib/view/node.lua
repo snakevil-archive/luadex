@@ -1,3 +1,4 @@
+require 'lfs'
 local class = require 'class'
 
 --- 基础节点页面组件
@@ -172,32 +173,59 @@ end
 -- @usage local html = page:body(cosmo)
 function page:body( cosmo )
     return cosmo.f[=[
-<div class="table-responsive">
-  <table class="table table-hover">
-    <tbody>
-      $folders[[
-        <tr>
-          <td>
-            <a href="$uri">$name</a>/
-          </td>
-        </tr>
-      ]]
-    </tbody>
-    <tbody>
-      $files[[
-        <tr>
-          <td>
-            <a href="$prefix$it">$it</a>
-          </td>
-        </tr>
-      ]]
-    </tbody>
-  </table>
+<div class="panel panel-info">
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <tbody>
+          $folders[[
+            <tr>
+              <td>
+                <a href="$uri">$name</a>
+              </td>
+              <td class="text-muted">/</td>
+            </tr>
+          ]]
+        </tbody>
+        <tbody>
+          $files[[
+            <tr>
+              <td>
+                <a href="$prefix$name">$name</a>
+              </td>
+              <td>$size</td>
+            </tr>
+          ]]
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 ]=]{
     prefix = self.node.uri,
     folders = self.node:children(),
-    files = self.node:files()
+    files = function ()
+        for _, name in ipairs(self.node:files()) do
+            local unit, size = '', lfs.attributes(self.node.path .. name, 'size')
+            if 99 < size then
+                size = size / 1024
+                unit = 'KB'
+            end
+            if 99 < size then
+                size = size / 1024
+                unit = 'MB'
+            end
+            if 99 < size then
+                size = size / 1024
+                unit = 'GB'
+            end
+            size = math.ceil(100 * size) / 100
+            cosmo.yield{
+                name = name,
+                size = size .. unit
+            }
+        end
+    end
 }
 end
 
