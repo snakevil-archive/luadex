@@ -35,6 +35,10 @@ end
 -- @return string
 -- @usage local html = page:header(cosmo)
 function page:header( cosmo )
+    local name = self.node.name
+    if self.node.aliases then
+        name = self.node.aliases[1]
+    end
     return cosmo.f[=[
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
@@ -43,13 +47,14 @@ function page:header( cosmo )
         <img class="media-object img-rounded" src="$node|uri./portrait.jpg">
       </div>
       <div class="media-body">
-        <h1 class="media-heading">$node|name</h1>
+        <h1 class="media-heading">$name</h1>
         <p>$node|romaji</p>
       </div>
     </div>
   </div>
 </div>
 ]=]{
+    name = name,
     node = self.node
 }
 end
@@ -65,6 +70,16 @@ function page:body( cosmo )
   <div class="panel-heading">&nbsp;</div>
   <div class="panel-body">
     <dl class="dl-horizontal">
+      $if{ $node|aliases }[[
+        <dt>Aliases</dt>
+        <dd>
+          <ul class="list-unstyled">
+            $node|aliases[[
+              <li>$it</li>
+            ]]
+          </ul>
+        </dd>
+      ]]
       $if{ $node|size }[[
         <dt>Size</dt>
         <dd>
@@ -111,7 +126,7 @@ $list
     ['if'] = cosmo.cif,
     metag = function ()
         for k, v in pairs(self.node:metadata()) do
-            if 'romaji' ~= k and 'size' ~= k and 'links' ~= k then
+            if 'romaji' ~= k and 'aliases' ~= k and 'size' ~= k and 'links' ~= k then
                 cosmo.yield{
                     field = k:sub(1, 1):upper() .. k:sub(2):lower(),
                     value = v
