@@ -3,7 +3,7 @@ local class = require 'class'
 --- 演员节点组件
 -- 影片索引节点的一种精化节点，应包含以下文件：
 -- * portrait.jpg - 头像
--- * mdata.yml - 元信息文件
+-- * metag.yml - 元信息文件
 -- @module model/actor
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type Model.Actor
@@ -27,7 +27,7 @@ function actor.test( path )
     local function exists( file )
         return 'file' == lfs.attributes(path .. '/' .. file, 'mode')
     end
-    return exists('portrait.jpg') and exists('mdata.yml')
+    return exists('portrait.jpg') and exists('metag.yml')
 end
 
 return actor

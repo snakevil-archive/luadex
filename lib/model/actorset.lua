@@ -13,6 +13,18 @@ local actors = class'Model.ActorSet':extends'Model.Node'
 -- @field type
 actors.type = 'actorset'
 
+--- 重载生成类实例方法
+-- @function new
+-- @param path 路径
+-- @param uri URI
+-- @return Model.Node
+-- @usage local actors = actors:new('/var/www/', '/')
+function actors:new( path, uri )
+    local instance = actors:super().new(self, path, uri)
+    instance.name = 'Actors'
+    return instance
+end
+
 --- 检查路径是否符合节点特征
 -- @function test
 -- @param path 路径

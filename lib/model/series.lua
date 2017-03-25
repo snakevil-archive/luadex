@@ -2,7 +2,7 @@ local class = require 'class'
 
 --- 系列节点组件
 -- 影片索引节点的一种精化节点，应包含以下文件：
--- * mdata.yml - 元信息文件
+-- * metag.yml - 元信息文件
 -- @module model/series
 -- @author Snakevil Zen <zsnakevil@gmail.com>
 -- @type Model.Series
@@ -26,7 +26,7 @@ function series.test( path )
     local function exists( file )
         return 'file' == lfs.attributes(path .. '/' .. file, 'mode')
     end
-    return exists('mdata.yml')
+    return exists('metag.yml')
 end
 
 return series

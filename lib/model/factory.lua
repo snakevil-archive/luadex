@@ -123,11 +123,11 @@ function factory:seriesset( path )
     local suffix, exists, paths = '', function (path)
         return 'directory' == lfs.attributes(path, 'mode')
     end, {
-        self._root .. '=/'
+        self._root .. '-/'
     }
     for part in path:sub(1 + #self._root):gmatch'[^/]+' do
         suffix = suffix .. part .. '/'
-        table.insert(paths, 1, self._root .. suffix .. '=/')
+        table.insert(paths, 1, self._root .. suffix .. '-/')
     end
     table.remove(paths, 1)
     for _, path in ipairs(paths) do

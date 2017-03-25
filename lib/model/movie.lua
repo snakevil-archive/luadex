@@ -26,7 +26,7 @@ movie.info = {}
 -- @param path 路径
 -- @param uri URI
 -- @return Model.Node
--- @usage local movie = movie:new'/var/www/'
+-- @usage local movie = movie:new('/var/www/', '/')
 function movie:new( path, uri )
     local instance = movie:super().new(self, path, uri)
     instance.name = instance.title
