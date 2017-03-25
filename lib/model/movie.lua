@@ -30,7 +30,7 @@ movie.info = {}
 function movie:new( path, uri )
     local instance = movie:super().new(self, path, uri)
     instance.name = instance.title
-    local info, kind = io.popen('mediainfo ' .. path .. 'movie.mp4'), nil
+    local info, kind = io.popen('mediainfo "' .. path .. 'movie.mp4"'), nil
     for line in info:lines() do
         local pos1, pos2 = line:find(' : ', 1, true)
         if pos1 then

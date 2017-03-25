@@ -42,7 +42,18 @@ end
 -- @return string
 -- @usage local html = page:header(cosmo)
 function page:header( cosmo )
-    local info = self.node.info
+    local info, context = self.node.info, {
+        width = 720,
+        height = 404,
+        ratio = '16:9',
+        ['if'] = cosmo.cif,
+        title = self.node.name
+    }
+    if 0 < #info then
+        context.width = info.video.width:gsub(' p.+$', ''):gsub('%s+', '')
+        context.height = 0 + info.video.height:gsub(' p.+$', ''):gsub('%s+', '')
+        context.ratio = info.video.display_aspect_ratio
+    end
     return cosmo.f[=[
 <div class="row">
   <div class="col-xs-12 col-md-8 col-md-offset-2">
@@ -59,13 +70,7 @@ function page:header( cosmo )
     </h2>
   </div>
 </div>
-]=]{
-    width = info.video.width:gsub(' p.+$', ''):gsub('%s+', ''),
-    height = 0 + info.video.height:gsub(' p.+$', ''):gsub('%s+', ''),
-    ratio = info.video.display_aspect_ratio,
-    ['if'] = cosmo.cif,
-    title = self.node.name
-}
+]=](context)
 end
 
 --- 生成正文部分 HTML
@@ -74,6 +79,50 @@ end
 -- @return string
 -- @usage local html = page:body(cosmo)
 function page:body( cosmo )
+    local context = {
+        ['if'] = cosmo.cif,
+        node = self.node,
+        actorset = self.node:actorset(),
+        seriesset = self.node:seriesset(),
+        metag = function ()
+            for k, v in pairs(self.node:metadata()) do
+                if 'title' ~= k and 'series' ~= k and 'actors' ~= k and 'links' ~= k then
+                    cosmo.yield{
+                        tag = k:sub(1, 1):upper() .. k:sub(2):lower(),
+                        value = v
+                    }
+                end
+            end
+        end,
+        links = function ()
+            for k, v in pairs(self.node.links) do
+                cosmo.yield{
+                    title = k,
+                    url = v
+                }
+            end
+        end,
+        snaps = (function ()
+            local snaps = {}
+            for _, file in ipairs(self.node:files()) do
+                if 'snap-' == file:sub(1, 5) and '.jpg' == file:sub(-4) then
+                    table.insert(snaps, file)
+                end
+            end
+            table.sort(snaps)
+            return snaps
+        end)(),
+        ratio = '16:9',
+        bitrate = '',
+        vformat = 'AVC',
+        aformat = 'AAC'
+    }
+    if 0 < #self.node.info then
+        context.ratio = self.node.info.video.display_aspect_ratio
+        context.bitrate = self.node.info.general.overall_bit_rate:gsub('%s+', '')
+        context.vformat = self.node.info.video.format
+        context.aformat = self.node.info.audio.format
+    end
     return cosmo.f[=[
 <div class="panel panel-warning">
   $if{ $node|actors }[[
@@ -122,8 +171,8 @@ function page:body( cosmo )
     </dl>
   </div>
   <div class="panel-footer text-right text-danger">
-    $node|info|video|display_aspect_ratio $bitrate
-    $node|info|video|format+$node|info|audio|format
+    $ratio $bitrate
+    $vformat+$aformat
   </div>
 </div>
 $if{ $snaps }[[
@@ -137,41 +186,7 @@ $if{ $snaps }[[
     ]]
   </div>
 ]]
-]=]{
-    ['if'] = cosmo.cif,
-    node = self.node,
-    actorset = self.node:actorset(),
-    seriesset = self.node:seriesset(),
-    metag = function ()
-        for k, v in pairs(self.node:metadata()) do
-            if 'title' ~= k and 'series' ~= k and 'actors' ~= k and 'links' ~= k then
-                cosmo.yield{
-                    tag = k:sub(1, 1):upper() .. k:sub(2):lower(),
-                    value = v
-                }
-            end
-        end
-    end,
-    links = function ()
-        for k, v in pairs(self.node.links) do
-            cosmo.yield{
-                title = k,
-                url = v
-            }
-        end
-    end,
-    snaps = (function ()
-        local snaps = {}
-        for _, file in ipairs(self.node:files()) do
-            if 'snap-' == file:sub(1, 5) and '.jpg' == file:sub(-4) then
-                table.insert(snaps, file)
-            end
-        end
-        table.sort(snaps)
-        return snaps
-    end)(),
-    bitrate = self.node.info.general.overall_bit_rate:gsub('%s+', '')
-}
+]=](context)
 end
 
 return page
