@@ -40,4 +40,21 @@ function movies.test( path )
     return false
 end
 
+-- 重载获取子节点表
+-- @function children
+-- @return table
+-- @usage local children = movies:children()
+function movies:children()
+    if not self._children then
+        local children = movies:super().children(self)
+        self._children = {}
+        for _, node in ipairs(children) do
+            if 'movie' == node.type then
+                table.insert(self._children, node)
+            end
+        end
+    end
+    return self._children
+end
+
 return movies

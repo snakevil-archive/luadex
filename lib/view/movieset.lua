@@ -59,15 +59,11 @@ $if{ $movies }[[
 ]]
 ]=]{
     ['if'] = cosmo.cif,
-    movies = (function ()
-        local movies = {}
+    movies = function ()
         for _, node in ipairs(self.node:children()) do
-            if 'movie' == node.type then
-                table.insert(movies, node)
-            end
+            cosmo.yield(node)
         end
-        return movies
-    end)()
+    end
 }
 end
 
