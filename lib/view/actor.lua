@@ -8,13 +8,11 @@ local page = class'View.Actor':extends'View.MovieSet'
 
 --- 扩展页面样式表链接
 -- @function css
--- @param cosmo
 -- @return string
--- @usage local html = page:css(cosmo)
-function page:css(cosmo)
+-- @usage local html = page:css()
+function page:css()
   return [=[
 <style>
-.jumbotron.end { margin-bottom: 0 }
 .media-object { max-width: 128px }
 .col\-lg\-4 { margin-bottom: 15px }
 .thumbnail {
@@ -31,15 +29,14 @@ end
 
 --- 生成页头部分 HTML
 -- @function header
--- @param cosmo
 -- @return string
--- @usage local html = page:header(cosmo)
-function page:header( cosmo )
+-- @usage local html = page:header()
+function page:header()
     local name = self.node.name
     if self.node.aliases then
         name = self.node.aliases[1]
     end
-    return cosmo.f[=[
+    return self.c.f[=[
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
     <div class="media">
@@ -61,11 +58,10 @@ end
 
 --- 生成正文部分 HTML
 -- @function body
--- @param cosmo
 -- @return string
--- @usage local html = page:body(cosmo)
-function page:body( cosmo )
-    return cosmo.f[=[
+-- @usage local html = page:body()
+function page:body()
+    return self.c.f[=[
 <div class="panel panel-warning">
   <div class="panel-heading">&nbsp;</div>
   <div class="panel-body">
@@ -123,11 +119,11 @@ function page:body( cosmo )
 $list
 ]=]{
     node = self.node,
-    ['if'] = cosmo.cif,
+    ['if'] = self.c.cif,
     metag = function ()
         for k, v in pairs(self.node:metadata()) do
             if 'romaji' ~= k and 'aliases' ~= k and 'size' ~= k and 'links' ~= k then
-                cosmo.yield{
+                self.c.yield{
                     field = k:sub(1, 1):upper() .. k:sub(2):lower(),
                     value = v
                 }
@@ -136,13 +132,13 @@ $list
     end,
     links = function ()
         for k, v in pairs(self.node.links) do
-            cosmo.yield{
+            self.c.yield{
                 url = v,
                 title = k
             }
         end
     end,
-    list = page:super().body(self, cosmo)
+    list = page:super().body(self)
 }
 end
 

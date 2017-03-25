@@ -7,6 +7,10 @@ local class = require 'class'
 -- @type View.Node
 local page = class'View.Node'
 
+--- Cosmo 引擎
+-- @field c
+page.c = require 'cosmo'
+
 --- 对应节点
 -- @field node
 page.node = nil
@@ -27,8 +31,7 @@ end
 -- @return string
 -- @usage local html = tostring(page)
 function page:__tostring()
-    local cosmo = require'cosmo'
-    return cosmo.f[=[
+    return self.c.f[=[
 <!doctype html>
 <html class="no-js" lang="en">
 <head>
@@ -53,7 +56,7 @@ function page:__tostring()
   <div class="container">
     $body
   </div>
-  <div class="end jumbotron">
+  <div class="jumbotron" style="margin-bottom:0">
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-offset-4">
@@ -98,8 +101,8 @@ function page:__tostring()
 </body>
 </html>
 ]=]{
-    css = self:css(cosmo),
-    js = self:js(cosmo),
+    css = self:css(),
+    js = self:js(),
     node = self.node,
     hierachy = (function ()
         local parent, uri, uri2, hierachy = self.node:parent(), '', '', {
@@ -130,49 +133,41 @@ function page:__tostring()
         end)
         return hierachy
     end)(),
-    header = self:header(cosmo),
-    body = self:body(cosmo)
+    header = self:header(),
+    body = self:body()
 }:gsub('>%s+', '>'):gsub('%s+<', '<')
 end
 
 --- 扩展页面样式表链接
 -- @function css
--- @param cosmo
 -- @return string
--- @usage local html = page:css(cosmo)
-function page:css(cosmo)
-  return [=[
-<style>
-.jumbotron.end { margin-bottom: 0 }
-</style>
-]=]
+-- @usage local html = page:css()
+function page:css()
+  return ''
 end
 
 --- 扩展页面脚本链接
 -- @function js
--- @param cosmo
 -- @return string
--- @usage local html = page:js(cosmo)
-function page:js(cosmo)
+-- @usage local html = page:js()
+function page:js()
   return ''
 end
 
 --- 生成页头部分 HTML
 -- @function header
--- @param cosmo
 -- @return string
--- @usage local html = page:header(cosmo)
-function page:header( cosmo )
+-- @usage local html = page:header()
+function page:header()
     return '<h1>' .. self.node.name .. '</h1>'
 end
 
 --- 生成正文部分 HTML
 -- @function body
--- @param cosmo
 -- @return string
--- @usage local html = page:body(cosmo)
-function page:body( cosmo )
-    return cosmo.f[=[
+-- @usage local html = page:body()
+function page:body()
+    return self.c.f[=[
 <div class="panel panel-info">
   <div class="panel-body">
     <div class="table-responsive">
@@ -220,7 +215,7 @@ function page:body( cosmo )
                 unit = 'GB'
             end
             size = math.ceil(100 * size) / 100
-            cosmo.yield{
+            self.c.yield{
                 name = name,
                 size = size .. unit
             }

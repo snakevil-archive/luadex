@@ -8,13 +8,11 @@ local page = class'View.ActorSet':extends'View.Node'
 
 --- 扩展页面样式表链接
 -- @function css
--- @param cosmo
 -- @return string
--- @usage local html = page:css(cosmo)
-function page:css(cosmo)
+-- @usage local html = page:css()
+function page:css()
   return [=[
 <style>
-.jumbotron.end { margin-bottom: 0 }
 .col\-lg\-4 { margin-bottom: 15px }
 </style>
 ]=]
@@ -22,10 +20,9 @@ end
 
 --- 扩展页面脚本链接
 -- @function js
--- @param cosmo
 -- @return string
--- @usage local html = page:js(cosmo)
-function page:js(cosmo)
+-- @usage local html = page:js()
+function page:js()
   return [=[
 <script src="//cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
 ]=]
@@ -33,11 +30,10 @@ end
 
 --- 生成正文部分 HTML
 -- @function body
--- @param cosmo
 -- @return string
--- @usage local html = page:body(cosmo)
-function page:body( cosmo )
-    return cosmo.f[=[
+-- @usage local html = page:body()
+function page:body()
+    return self.c.f[=[
 $if{ $has_actors }[[
   <div class="row" data-masonry='{"itemSelector":".col-lg-4"}'>
     $actors[[
@@ -53,7 +49,7 @@ $if{ $has_actors }[[
   </div>
 ]]
 ]=]{
-    ['if'] = cosmo.cif,
+    ['if'] = self.c.cif,
     has_actors = 0 < #self.node:children(),
     actors = function ()
         local actors = {}
@@ -64,7 +60,7 @@ $if{ $has_actors }[[
             end
             if not actors[name] then
                 actors[name] = true
-                cosmo.yield(node)
+                self.c.yield(node)
             end
         end
     end
