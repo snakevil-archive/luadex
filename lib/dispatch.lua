@@ -6,8 +6,9 @@ local class = require 'class'
 -- @function dispatch
 -- @param path 路径
 -- @param uri URI
+-- @param lap 程序启动时间
 -- @usage dispatch('/var/www', '/')
-return function ( path, uri )
+return function ( path, uri, lap )
     uri = uri:gsub('%%(%x%x)', function (hex)
         return string.char(tonumber(hex, 16))
     end)
@@ -18,6 +19,12 @@ return function ( path, uri )
         uri = uri .. '/'
     end
     local node = class.load'Model.Factory':pair(path, uri):parse(path)
-    local page = class.load'View.Factory':parse(node)
-    return tostring(page)
+    local page = tostring(class.load'View.Factory':parse(node))
+    local pos1, pos2 = page:find('%PROFILER%', 1, true)
+    if not pos1 then
+        return page
+    end
+    return page:sub(1, pos1 - 1)
+        .. math.ceil(1000 * (os.clock() - lap or 0))
+        .. 'ms costed' .. page:sub(1 + pos2)
 end

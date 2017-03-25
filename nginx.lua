@@ -1,3 +1,5 @@
+local lap = os.clock()
+
 if not ngx.var.luadex then
     ngx.status = ngx.HTTP_SERVICE_UNAVAILABLE
     ngx.say'$luadex not set.'
@@ -9,7 +11,7 @@ if package.path:sub(1, #incpath) ~= incpath then
     package.path = incpath .. package.path
 end
 
-local succeed, html = pcall(require'dispatch', ngx.var.request_filename, ngx.var.request_uri)
+local succeed, html = pcall(require'dispatch', ngx.var.request_filename, ngx.var.request_uri, lap)
 if not succeed then
     ngx.status = ngx.HTTP_SERVICE_UNAVAILABLE
     ngx.log(ngx.ERR, html)

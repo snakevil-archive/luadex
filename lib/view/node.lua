@@ -62,11 +62,12 @@ function page:__tostring()
       <div class="row">
         <div class="col-xs-12 col-sm-8 col-sm-offset-4">
           <address>
-            <a href="https://github.com/snakevil/luadex" target="_blank">Luadex</a>
-            <span>, A piece of expirement work of&nbsp;</span>
-            <a href="https://twitter.com/snakevil" target="_blank">@Snakevil</a>
-          </address>
-          <address>
+            <strong>
+              <a href="https://github.com/snakevil/luadex" target="_blank">Luadex</a>
+              <span>, A piece of expirement work of&nbsp;</span>
+              <a href="https://twitter.com/snakevil" target="_blank">@Snakevil</a>
+            </strong>
+            <br>
             <span>Based on&nbsp;</span>
             <a href="https://github.com/openresty/lua-nginx-module/" target="_blank">ngx_lua</a>
             <span>,&nbsp;</span>
@@ -86,11 +87,15 @@ function page:__tostring()
             <a href="http://masonry.desandro.com" target="_blank">Masonry</a>
             <span>&nbsp;and&nbsp;<span>
             <a href="http://fancyapps.com/fancybox/3/" target="_blank">fancyBox</a>
+            <br>
+            <em>
+              <span>Thanks to&nbsp;</span>
+              <a href="http://www.bootcdn.cn" target="_blank">BootCDN</a>
+              <span>&nbsp;for their free service :-)</span>
+            </em>
           </address>
           <address>
-            <span>Thanks to&nbsp;</span>
-            <a href="http://www.bootcdn.cn" target="_blank">BootCDN</a>
-            <span>&nbsp;for their free service :-)</span>
+            <small>%PROFILER%</small>
           </address>
         </div>
       </div>
