@@ -6,4 +6,69 @@ local class = require 'class'
 -- @type View.ActorSet
 local page = class'View.ActorSet':extends'View.Node'
 
+--- 扩展页面样式表链接
+-- @function css
+-- @param cosmo
+-- @return string
+-- @usage local html = page:css(cosmo)
+function page:css(cosmo)
+  return [=[
+<style>
+.jumbotron.end { margin-bottom: 0 }
+.col\-lg\-4 { margin-bottom: 15px }
+</style>
+]=]
+end
+
+--- 扩展页面脚本链接
+-- @function js
+-- @param cosmo
+-- @return string
+-- @usage local html = page:js(cosmo)
+function page:js(cosmo)
+  return [=[
+<script src="//cdn.bootcss.com/masonry/4.1.1/masonry.pkgd.min.js"></script>
+]=]
+end
+
+--- 生成正文部分 HTML
+-- @function body
+-- @param cosmo
+-- @return string
+-- @usage local html = page:body(cosmo)
+function page:body( cosmo )
+    return cosmo.f[=[
+$if{ $has_actors }[[
+  <div class="row" data-masonry='{"itemSelector":".col-lg-4"}'>
+    $actors[[
+      <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+        <a class="thumbnail" href="$uri">
+          <img src="$uri./portrait.jpg">
+          <div class="caption">
+            <h2 class="h4">$name</h2>
+          </div>
+        </a>
+      </div>
+    ]]
+  </div>
+]]
+]=]{
+    ['if'] = cosmo.cif,
+    has_actors = 0 < #self.node:children(),
+    actors = function ()
+        local actors = {}
+        for _, node in ipairs(self.node:children()) do
+            local name = node.name
+            if node.aliases then
+                name = node.aliases[1]
+            end
+            if not actors[name] then
+                actors[name] = true
+                cosmo.yield(node)
+            end
+        end
+    end
+}
+end
+
 return page

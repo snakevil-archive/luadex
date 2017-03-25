@@ -38,4 +38,21 @@ function actors.test( path )
     return '@' == parts[#parts]
 end
 
+-- 重载获取子节点表
+-- @function children
+-- @return table
+-- @usage local children = actors:children()
+function actors:children()
+    if not self._children then
+        local children = actors:super().children(self)
+        self._children = {}
+        for _, node in ipairs(children) do
+            if 'actor' == node.type then
+                table.insert(self._children, node)
+            end
+        end
+    end
+    return self._children
+end
+
 return actors
